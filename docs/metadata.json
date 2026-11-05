@@ -1,0 +1,5 @@
+{
+    "name": "Notifications",
+    "description": "Laravel notifications defined once for mail, database, broadcast, FCM and SMS, with notification pages, a live bell, branded mail and Dhivehi support",
+    "version": "1"
+}

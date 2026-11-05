@@ -1,0 +1,11 @@
+{
+    "position": 1.31,
+    "label": "Advanced Usage",
+    "collapsible": true,
+    "collapsed": false,
+    "link": {
+        "type": "generated-index",
+        "slug": "/notifications/_categories/advanced-usage",
+        "description": "Live updates, translations, permissions, overrides and every option."
+    }
+}

@@ -1,0 +1,43 @@
+# javaabu/notifications
+
+> Notifications for Laravel, built on Laravel's own. A notification extends Javaabu\Notifications\BaseNotification and defines message() once, returning a NotificationMessage (title, lines, action, icon, colour, thumbnail, subject model, data); the package builds mail (branded, right to left for Dhivehi), database, broadcast, FCM (laravel-notification-channels/fcm, optional) and SMS (javaabu/sms-notifications) from it, sends each notifiable only the channels it can receive and hasn't turned off, in its own language. It ships a notifications page and a live bell in Blade (javaabu/forms v2, <x-notifications::bell>) and Inertia React (@javaabu/forms and Onu, NotificationBell from @javaabu/notifications through javaabu/manifest), updated over Laravel Reverb or by polling, with routes from Route::notifications(), an overridable controller and policy, and permissions through javaabu/permissions. With javaabu/translatable, database notifications are stored in every active language.
+
+Paths are relative to this file. In a project, that's vendor/javaabu/notifications/.
+
+## Rules
+
+- Extend `Javaabu\Notifications\BaseNotification` and implement `message(object $notifiable): NotificationMessage`. Don't write `toMail()`, `toArray()`, `toSms()` or `toFcm()` by hand unless a channel needs something the message can't say; then call `parent::toMail()` and change it.
+- List channels in `protected array $channels = ['database', 'mail', 'sms', 'fcm']`. Don't filter them in `via()` yourself: BaseNotification already drops channels the notifiable has no route for and channels it turned off. `broadcast` is added by itself when live updates are on.
+- Notifiables use `Javaabu\Notifications\Concerns\Notifiable` instead of Laravel's `Notifiable`. For SMS, implement `SmsNotifiable` with `HasSmsNumber` and `routeNotificationForSms()`; for push, `routeNotificationForFcm()`.
+- Put every user-facing string through `__()` inside `message()`: it runs in the notifiable's locale (`HasLocalePreference` or the `locale` attribute). Add Dhivehi to the app's `lang/dv.json`. Use Thaana in tests.
+- Pass the model the notification is about with `->subject($model)`, so it's saved as a morph and the page can link to it. Implement `NotificationSubject::notificationUrl()` on models instead of building URLs in every notification.
+- Icons are Onu semantic names (`bell`, `mail`, `send`, `success`, `warning`, `user`, …). Colours are `primary`, `secondary`, `success`, `info`, `warning`, `danger`, `neutral`.
+- Register routes with `Route::notifications()` inside the app's `web` group, once per guard: `Route::notifications(['guard' => 'web_admin', 'prefix' => 'admin/notifications', 'name' => 'admin.notifications'])`. Link to a notification through `notifications.show` (it marks it read and redirects), never straight to its URL.
+- Show the bell with `<x-notifications::bell />` in Blade, or share `BellData::make($request->user())` with Inertia and render `<NotificationBell bell={props.notifications} />`.
+- Preferences: implement `HasNotificationPreferences` with `ManagesNotificationPreferences` (a `notification_preferences` JSON column) and save with `setNotificationPreference('order-shipped', 'mail', false)`. Required channels (`notifications.required_channels`, `database`) can't be turned off.
+- Everyone manages their own notifications without permissions. Give `view_others_notifications` / `delete_others_notifications` to support roles. Run `php artisan permissions:sync`.
+- Brand mail once in `notifications.mail.branding` (logo URL, colours, footer). Mailables use the same look with `$theme = 'notifications::mail.theme'` and `<x-mail::branded>`.
+- Test with `Notification::fake()` and `assertSentTo(..., fn ($n, $channels) => ...)`, or `notifyNow($notification, ['database'])` and read `$user->notifications()->first()->title()`.
+
+## Docs
+
+- [Introduction](docs/intro.md): what the package does
+- [Requirements](docs/requirements.md): PHP, Laravel, dependencies and optional packages
+- [Installation & Setup](docs/installation-and-setup.md): migrating, notifiable models, routes, permissions, the bell and page in Blade and React, live updates, branding, publishing
+- [AI assistants](docs/ai-assistants.md): Laravel Boost and these docs
+- [Writing notifications](docs/basic-usage/writing-notifications.md): BaseNotification, NotificationMessage, what each channel gets, labels, languages
+- [Channels and preferences](docs/basic-usage/channels-and-preferences.md): how channels are chosen, SMS, FCM, preferences, required channels
+- [Database notifications](docs/basic-usage/database-notifications.md): the model, reading, subjects, icons, colours, thumbnails, opening
+- [The notifications page](docs/basic-usage/notifications-page.md): routes and options, the Blade and React page, the JSON, other users' notifications
+- [The bell](docs/basic-usage/the-bell.md): `<x-notifications::bell>`, NotificationBell and BellData, useNotifications
+- [Branded mail](docs/basic-usage/branded-mail.md): branding config, right to left, Mailables, changing it
+- [Live updates](docs/advanced-usage/live-updates.md): Reverb, the channel and its authorization, polling
+- [Translations](docs/advanced-usage/translations.md): javaabu/translatable, every language in the database, turning it off, testing
+- [Permissions and policies](docs/advanced-usage/permissions-and-policies.md): abilities, permissions, replacing the policy
+- [Overriding controllers and views](docs/advanced-usage/overriding-controllers-and-views.md): controller, model, Blade views, React files, routes
+- [Dhivehi and RTL](docs/advanced-usage/dhivehi-and-rtl.md): strings, right to left, translations for review
+- [Testing](docs/advanced-usage/testing.md): channels, contents, languages, routes
+- [Configuration](docs/advanced-usage/configuration.md): every option
+- [API reference](docs/advanced-usage/api-reference.md): every PHP class and JavaScript export
+- [Questions and Security](docs/questions-and-security.md): where to get help
+- [Changelog](CHANGELOG.md)

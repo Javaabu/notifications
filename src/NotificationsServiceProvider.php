@@ -136,9 +136,5 @@ class NotificationsServiceProvider extends ServiceProvider
         $this->publishes([
             __DIR__ . '/../resources/views' => resource_path('views/vendor/notifications'),
         ], 'notifications-views');
-
-        $this->publishes([
-            __DIR__ . '/../lang' => $this->app->langPath('vendor/notifications'),
-        ], 'notifications-translations');
     }
 }
