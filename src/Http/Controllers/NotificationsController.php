@@ -5,6 +5,7 @@ namespace Javaabu\Notifications\Http\Controllers;
 use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\Relation;
 use Illuminate\Http\JsonResponse;
@@ -103,14 +104,35 @@ class NotificationsController extends Controller
             ->limit($limit)
             ->get();
 
+        $meta = [
+            'unread_count' => $this->query($request, $notifiable)->whereNull('read_at')->count(),
+            ...$this->meta($request, $notifiable),
+        ];
+
+        // The Blade bell swaps in the server-rendered items, so they look the same as on first load
+        if ($request->boolean('html')) {
+            $meta['html'] = $this->renderItems($request, $notifications);
+        }
+
         return NotificationResource::collection($notifications)
-            ->additional([
-                'meta' => [
-                    'unread_count' => $this->query($request, $notifiable)->whereNull('read_at')->count(),
-                    ...$this->meta($request, $notifiable),
-                ],
-            ])
+            ->additional(['meta' => $meta])
             ->response();
+    }
+
+    /**
+     * @param  Collection<int, DatabaseNotification>  $notifications
+     */
+    protected function renderItems(Request $request, Collection $notifications): string
+    {
+        $routes = NotificationRoutes::names(NotificationRoutes::namePrefix($request));
+
+        return $notifications
+            ->map(fn (DatabaseNotification $notification) => view('notifications::notifications.partials.item', [
+                'notification' => $notification,
+                'routes' => $routes,
+                'actions' => false,
+            ])->render())
+            ->implode('');
     }
 
     /**

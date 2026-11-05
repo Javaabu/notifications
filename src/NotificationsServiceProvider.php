@@ -4,6 +4,7 @@ namespace Javaabu\Notifications;
 
 use Illuminate\Mail\Markdown;
 use Illuminate\Notifications\Channels\DatabaseChannel as IlluminateDatabaseChannel;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Javaabu\Manifest\Concerns\RegistersAssets;
@@ -29,6 +30,7 @@ class NotificationsServiceProvider extends ServiceProvider
     {
         $this->loadJsonTranslationsFrom(__DIR__ . '/../lang');
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'notifications');
+        Blade::componentNamespace('Javaabu\\Notifications\\View\\Components', 'notifications');
 
         $this->registerFrontendAssets();
         $this->registerMailComponents();
