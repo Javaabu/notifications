@@ -19,6 +19,8 @@ class TestServiceProvider extends ServiceProvider
 
         View::addLocation(__DIR__ . '/../views');
 
+        $this->loadJsonTranslationsFrom(__DIR__ . '/../lang');
+
         Relation::morphMap([
             'user' => User::class,
             'admin' => Admin::class,

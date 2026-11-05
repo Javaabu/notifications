@@ -215,10 +215,6 @@ class BaseNotificationTest extends TestCase
     #[Test]
     public function it_notifies_in_the_notifiables_locale(): void
     {
-        app('translator')->addLines([
-            '*.Welcome' => 'މަރުޙަބާ',
-            '*.Thanks for joining.' => 'ބައިވެރިވީތީ ޝުކުރިއްޔާ.',
-        ], 'dv');
 
         $user = User::factory()->create(['locale' => 'dv']);
 

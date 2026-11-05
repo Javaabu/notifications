@@ -12,6 +12,7 @@ use Javaabu\Permissions\Models\Permission;
 use Javaabu\Permissions\Models\Role;
 use Javaabu\Permissions\PermissionsServiceProvider;
 use Javaabu\SmsNotifications\SmsNotificationsServiceProvider;
+use Javaabu\Translatable\TranslatableServiceProvider;
 use Orchestra\Testbench\TestCase as BaseTestCase;
 use Spatie\Permission\PermissionServiceProvider;
 
@@ -51,7 +52,8 @@ abstract class TestCase extends BaseTestCase
 
     protected function getPackageProviders($app): array
     {
-        return [
+        return array_filter([
+            class_exists(TranslatableServiceProvider::class) ? TranslatableServiceProvider::class : null,
             PermissionServiceProvider::class,
             PermissionsServiceProvider::class,
             ManifestServiceProvider::class,
@@ -59,6 +61,6 @@ abstract class TestCase extends BaseTestCase
             SmsNotificationsServiceProvider::class,
             NotificationsServiceProvider::class,
             TestServiceProvider::class,
-        ];
+        ]);
     }
 }
