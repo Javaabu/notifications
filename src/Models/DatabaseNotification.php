@@ -121,6 +121,20 @@ class DatabaseNotification extends BaseDatabaseNotification
         return $this->data['color'] ?? config('notifications.defaults.color', 'primary');
     }
 
+    /**
+     * The colour as one of Onu's tones (neutral, info, success, warning, danger), for the icon tile
+     */
+    public function tone(): string
+    {
+        return match ($this->color()) {
+            'success' => 'success',
+            'warning' => 'warning',
+            'danger', 'error' => 'danger',
+            'secondary', 'neutral' => 'neutral',
+            default => 'info',
+        };
+    }
+
     public function thumbnail(): ?string
     {
         return $this->data['thumbnail'] ?? null;
