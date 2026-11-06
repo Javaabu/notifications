@@ -129,7 +129,7 @@ Put the bell in your layout:
 <x-notifications::bell />
 ```
 
-The page and the bell load a small script through [javaabu/manifest](https://github.com/Javaabu/manifest), which adds it to your Vite build. The views use Tailwind classes with Onu's tokens (`bg-card`, `text-muted-foreground`, …); add the package's views to your Tailwind sources:
+The page and the bell load a small script through [javaabu/manifest](https://github.com/Javaabu/manifest), which adds it to your Vite build. It needs no npm packages of its own, so `php artisan manifest:check` doesn't ask a Blade app for React or `@javaabu/forms`. The views use Tailwind classes with Onu's tokens (`bg-card`, `text-muted-foreground`, …); add the package's views to your Tailwind sources:
 
 ```css
 /* resources/css/app.css */
@@ -167,7 +167,7 @@ import { NotificationBell } from "@javaabu/notifications";
 <NotificationBell bell={props.notifications} />
 ```
 
-Install the npm packages the components use (`php artisan manifest:check` prints the command), and add the package's components to your Tailwind sources:
+Install the npm packages the components use (`php artisan manifest:check` lists them once `@inertiajs/react` is in your `package.json`, and prints the command), and add the package's components to your Tailwind sources:
 
 ```css
 @source '../../vendor/javaabu/notifications/resources/js/**/*.tsx';

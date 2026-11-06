@@ -11,3 +11,4 @@ All notable changes to `notifications` will be documented in this file.
 - Branded mail from one config, right to left for Dhivehi
 - Notifications in the notifiable's language; with javaabu/translatable, database notifications in every active language
 - English and Dhivehi strings
+- The React page and components' npm packages are declared for pages only, so `manifest:check` doesn't ask Blade apps for React

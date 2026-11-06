@@ -115,7 +115,7 @@ import { NotificationBell } from "@javaabu/notifications";
 {props.notifications ? <NotificationBell bell={props.notifications} /> : null}
 ```
 
-Link to a notification with `route('notifications.show', $notification->id)` (or `links.show` in JSON): it marks it read and redirects. Live updates use Reverb when installed (Echo on `window.Echo`), polling otherwise.
+Link to a notification with `route('notifications.show', $notification->id)` (or `links.show` in JSON): it marks it read and redirects. Live updates use Reverb when installed (Echo on `window.Echo`), polling otherwise. A Blade app needs no npm packages for the page or bell beyond Vite; the React page and components need `@javaabu/forms`, `@javaabu/onu`, React and `@inertiajs/react` (`php artisan manifest:check` lists them for Inertia apps).
 
 ## Mail
 

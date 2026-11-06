@@ -55,6 +55,8 @@ class NotificationsServiceProvider extends ServiceProvider
                 ->script('notifications', 'js/blade/notifications.ts')
                 ->js()
                 ->pages()
+                // Only the Inertia page and the components apps import use these: the Blade
+                // script imports nothing, so Blade apps aren't asked to install React
                 ->npm([
                     '@javaabu/forms' => 'github:Javaabu/react-forms#next-gen',
                     '@javaabu/onu' => '^0.2.1',
@@ -62,7 +64,7 @@ class NotificationsServiceProvider extends ServiceProvider
                     'react' => '^18.3 || ^19.0',
                     'react-dom' => '^18.3 || ^19.0',
                     '@inertiajs/react' => '^2.0 || ^3.0',
-                ]);
+                ], for: 'pages');
         });
     }
 
