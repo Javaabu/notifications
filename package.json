@@ -10,7 +10,7 @@
   },
   "devDependencies": {
     "@inertiajs/react": "^2.0.0",
-    "@javaabu/forms": "github:Javaabu/react-forms#next-gen",
+    "@javaabu/forms": "^0.1.1",
     "@javaabu/onu": "^0.2.1",
     "@testing-library/react": "^16.0.0",
     "@types/react": "^19.0.0",
